@@ -19,7 +19,6 @@ import cdac.modelsp1.Stlogindac;
 import cdac.modelsp1.Sturegister;
 import cdac.modelsp1.Teacherlogin;
 import cdac.modelsp1.Teacherregister;
-import cdac.reposp1.LoginDacrepo;
 import cdac.servicesp1.Service;
 import cdac.testanshul.TestRepo;
 
@@ -43,8 +42,6 @@ public class Controller {
 
 	@Autowired
 	Service s;
-	@Autowired
-	LoginDacrepo cccc;
 
 	// General Notifications - showing in home page
 	@GetMapping("/gnoti")
@@ -62,13 +59,14 @@ public class Controller {
 	// content of all the 3 class is same thats why stlogindac can store other
 	// class's data
 	// advantage => only one login function
-	@GetMapping("/loginst")
+	@PostMapping("/loginst")
 	public Status loginchkst(@RequestBody Stlogindac stdacobj) {
+		System.out.println(stdacobj);
 		return s.login(stdacobj.getPrn(), stdacobj.getPwd());
 	}
 
 	// Teacher login
-	@GetMapping("/loginte")
+	@PostMapping("/loginte")
 	public Status loginchkte(@RequestBody Teacherlogin tobj) {
 		return s.loginte(tobj.getTid(), tobj.getPwd());
 	}

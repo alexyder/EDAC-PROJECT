@@ -115,6 +115,7 @@ public class Service implements ServiceInf {
 			if (obj.get().getPwd().equals(pwd)) {
 				sss.setCode(1);
 				sss.setBobo(true);
+				sss.setMsg(obj.get().getFullname());
 			}
 		}
 		return sss;
@@ -171,6 +172,7 @@ public class Service implements ServiceInf {
 			if (x != 0) {
 				sss.setCode(1);
 				sss.setBobo(true);
+				sss.setMsg("Success");
 			}
 		}
 		return sss;
