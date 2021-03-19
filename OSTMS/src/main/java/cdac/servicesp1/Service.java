@@ -51,8 +51,14 @@ public class Service implements ServiceInf {
 
 	@Override // fetching public notifications
 	public List<Gnoti> gnotifetch() {
-		List<Gnoti> gobjlist = g1.findAll();
-		return gobjlist;
+		List<Gnoti> gobjlist1 = g1.findAll();
+		List<Gnoti> gobjlist2 = new ArrayList<>();
+		for (int i = gobjlist1.size() - 1; i >= 0; i--) {
+			gobjlist2.add(gobjlist1.get(i));
+		}
+//		System.out.println(gobjlist2);
+//		System.out.println(gobjlist2.size() == gobjlist1.size());
+		return gobjlist2;
 	}
 
 	@Override // teacher -> adding public notifications
@@ -65,6 +71,7 @@ public class Service implements ServiceInf {
 			g1.save(gobj);
 			sss.setCode(1);
 			sss.setBobo(true);
+			sss.setMsg("Success");
 		} catch (Exception e) {
 			System.out.println("null message");
 		}
@@ -115,6 +122,7 @@ public class Service implements ServiceInf {
 			if (obj.get().getPwd().equals(pwd)) {
 				sss.setCode(1);
 				sss.setBobo(true);
+				sss.setMsg(obj.get().getFullname());
 			}
 		}
 		return sss;
@@ -171,6 +179,7 @@ public class Service implements ServiceInf {
 			if (x != 0) {
 				sss.setCode(1);
 				sss.setBobo(true);
+				sss.setMsg("Success");
 			}
 		}
 		return sss;
