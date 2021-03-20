@@ -1,12 +1,16 @@
 package cdac.servicesp1;
 
-import java.util.List;
+import java.util.List;	
 
 import cdac.courier.Status;
 import cdac.modelsp1.Gnoti;
 import cdac.modelsp1.Queries;
+import cdac.modelsp1.Stloginai;
+import cdac.modelsp1.Stlogindac;
+import cdac.modelsp1.Stlogindbda;
 import cdac.modelsp1.Sturegister;
 import cdac.modelsp1.Teacherregister;
+
 
 public interface ServiceInf {
 
@@ -37,5 +41,12 @@ public interface ServiceInf {
 	Teacherregister viewprofte(int tid); // teacher viewing his profile
 
 	Status updatetea(int prn, Teacherregister teobj); // teacher updating profile
+	
+	List<Stlogindac>getStd1All(String course); // fetching student details
+	
+	
+	
+	
+	
 
 }

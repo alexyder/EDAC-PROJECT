@@ -1,8 +1,11 @@
 package cdac.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import cdac.courier.Status;
 import cdac.modelsp1.Gnoti;
 import cdac.modelsp1.Queries;
+import cdac.modelsp1.Stloginai;
 import cdac.modelsp1.Stlogindac;
+import cdac.modelsp1.Stlogindbda;
 import cdac.modelsp1.Sturegister;
 import cdac.modelsp1.Teacherlogin;
 import cdac.modelsp1.Teacherregister;
@@ -135,4 +140,34 @@ public class Controller {
 
 	/////////////////////////////// SPRINT-2 ///////////////////////////////
 
+	
+//	@GetMapping("studentdetails/{course}")
+//	public List<Stlogindac> Studentdetails1(@PathVariable String course) {
+//		
+//		return s.getStd1All(course);
+//	}
+	
+	
+	@GetMapping("studentdetails/{course}")
+	public ResponseEntity<List> Studentdetails1(@PathVariable String course) {
+		List list=null;
+		try {
+			list = s.getStd1All(course);
+			return ResponseEntity.of(Optional.of(list));
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+		}
+//		if(true) {
+//			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+//		}
+//		else {
+//			return ResponseEntity.of(Optional.of(list));
+//		}
+	}
+	
+	
+	
+	
+	
 }

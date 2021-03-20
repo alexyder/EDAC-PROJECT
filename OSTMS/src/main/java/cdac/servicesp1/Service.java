@@ -1,6 +1,6 @@
 package cdac.servicesp1;
 
-import java.time.LocalDate;
+import java.time.LocalDate;	
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +13,11 @@ import cdac.modelsp1.Queries;
 import cdac.modelsp1.Stloginai;
 import cdac.modelsp1.Stlogindac;
 import cdac.modelsp1.Stlogindbda;
+
 import cdac.modelsp1.Sturegister;
 import cdac.modelsp1.Teacherlogin;
 import cdac.modelsp1.Teacherregister;
+
 import cdac.reposp1.Gnotirepo;
 import cdac.reposp1.LoginAirepo;
 import cdac.reposp1.LoginDacrepo;
@@ -48,6 +50,8 @@ public class Service implements ServiceInf {
 	RegStrepo rs;
 	@Autowired
 	RegTerepo rt;
+	
+	
 
 	@Override // fetching public notifications
 	public List<Gnoti> gnotifetch() {
@@ -265,4 +269,33 @@ public class Service implements ServiceInf {
 		}
 		return sss;
 	}
+
+	@Override
+	public List getStd1All(String course) {
+		List<Stlogindac> stdlistdac=null;
+		List<Stloginai> stdlistai=null;
+		List<Stlogindbda> stdlistdbda=null;
+		
+		if(course.equals("DAC"))
+		{
+			stdlistdac = st1.findAll();
+			return stdlistdac;
+		}else if(course.equals("DBDA")) {
+			stdlistdbda = st2.findAll();
+			return stdlistdbda;
+		}else if(course.equals("AI")) {
+			stdlistai = st3.findAll();	
+			return stdlistai;
+		}
+		else {
+			return null;
+		}
+		
+		
+	}
+
+	
+	
+	
+	
 }
