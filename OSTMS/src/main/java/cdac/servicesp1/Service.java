@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import cdac.courier.Status;
 import cdac.modelsp1.Gnoti;
@@ -137,12 +139,47 @@ public class Service implements ServiceInf {
 		return sss;
 	}
 
+//	@Override // student viewing his queries
+//	public List<Queries> viewquery(int prn) {
+//		List<Queries> qobjlist = q1.findmyquery(prn);
+//		return qobjlist;
+//	}
+	
+	
 	@Override // student viewing his queries
 	public List<Queries> viewquery(int prn) {
 		List<Queries> qobjlist = q1.findmyquery(prn);
 		return qobjlist;
 	}
+	
 
+//	@Override // teacher viewing queries
+//	public List<Queries> viewqueryte(String course, String module) {
+//
+//		List<Queries> qall = q1.findAll();
+//		List<Queries> qreq = new ArrayList<>();
+//
+//		int cid = 0;
+//		if (course.equals("DAC"))
+//			cid = 101;
+//		else if (course.equals("DBDA"))
+//			cid = 102;
+//		else if (course.equals("AI"))
+//			cid = 103;
+//
+//		for (Queries q : qall) {
+//			if ((q.getPrn() / 10000000) == cid) {
+//				if (q.getModule().equals(module)) {
+//					qreq.add(q);
+//				}
+//			}
+//		}
+//		return qreq;
+//	}
+	
+	
+	
+	
 	@Override // teacher viewing queries
 	public List<Queries> viewqueryte(String course, String module) {
 
@@ -166,79 +203,98 @@ public class Service implements ServiceInf {
 		}
 		return qreq;
 	}
+	
+	
 
+//	@Override // teacher replying queries
+//	public Status replyquery(int qid, String reply) {
+//		Status sss = new Status(0, false, null);
+//		if (q1.existsById(qid)) {
+//			int x = q1.replydone(qid, reply);
+//			if (x != 0) {
+//				sss.setCode(1);
+//				sss.setBobo(true);
+//			}
+//		}
+//		return sss;
+//	}
+	
+	
 	@Override // teacher replying queries
-	public Status replyquery(int qid, String reply) {
-		Status sss = new Status(0, false, null);
+	public boolean replyquery(int qid, String reply) {
+		
 		if (q1.existsById(qid)) {
 			int x = q1.replydone(qid, reply);
 			if (x != 0) {
-				sss.setCode(1);
-				sss.setBobo(true);
+				return true;
 			}
 		}
-		return sss;
+		return false;
 	}
+	
+	
 
 	@Override // student registration
-	public Status stuReg(int prn, Sturegister stuobj) {
-		Status sss = new Status(0, false, "Duplicate Entry");
+	public boolean stuReg(int prn, Sturegister stuobj) {
+		
 		stuobj.setPrn(prn);
 		if (!rs.existsById(prn)) {
 			try {
 				rs.save(stuobj);
-				sss.setCode(1);
-				sss.setBobo(true);
-				sss.setMsg("Success");
+				return true;
+				
 			} catch (Exception e) {
+				return false;
 			}
 		}
-		return sss;
+		return false;
 	}
 
 	@Override // student viewing profile // return null for guest user
 	public Sturegister viewprofst(int prn) {
+		System.out.println(prn);
 		Sturegister x = null;
 		try {
-			if (prn != 0) {
+			if (prn!=0) {
 				Optional<Sturegister> y = rs.findById(prn);
+				
 				x = y.get();
+				
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
 		return x;
 	}
 
 	@Override // student updating profile
-	public Status updatestu(int prn, Sturegister stuobj) {
-		Status sss = new Status(0, false, null);
+	public boolean updatestu(int prn, Sturegister stuobj) {
+		
 		stuobj.setPrn(prn);
 		if (rs.existsById(prn)) {
 			try {
 				rs.save(stuobj);
-				sss.setCode(1);
-				sss.setBobo(true);
-				sss.setMsg("Success");
+				return true;
 			} catch (Exception e) {
+				return false;
 			}
 		}
-		return sss;
+		return false;
 	}
 
 	@Override // teacher registration
-	public Status teaReg(int tid, Teacherregister teobj) {
-		Status sss = new Status(0, false, "Duplicate Entry");
+	public boolean teaReg(int tid, Teacherregister teobj) {
 		teobj.setTid(tid);
 		if (!rt.existsById(tid)) {
 			try {
 				rt.save(teobj);
-				sss.setCode(1);
-				sss.setBobo(true);
-				sss.setMsg("Success");
+				return true;
 			} catch (Exception e) {
+				return false;
 			}
 		}
-		return sss;
+		return false;
 	}
 
 	@Override // teacher viewing his profile
@@ -254,20 +310,36 @@ public class Service implements ServiceInf {
 		return x;
 	}
 
+//	@Override // teacher updating profile
+//	public Status updatetea(int tid, Teacherregister teobj) {
+//		Status sss = new Status(0, false, null);
+//		teobj.setTid(tid);
+//		if (rt.existsById(tid)) {
+//			try {
+//				rt.save(teobj);
+//				sss.setCode(1);
+//				sss.setBobo(true);
+//				sss.setMsg("Success");
+//			} catch (Exception e) {
+//			}
+//		}
+//		return sss;
+//	}
+	
+	
 	@Override // teacher updating profile
-	public Status updatetea(int tid, Teacherregister teobj) {
-		Status sss = new Status(0, false, null);
+	public boolean  updatetea(int tid, Teacherregister teobj) {
 		teobj.setTid(tid);
 		if (rt.existsById(tid)) {
 			try {
 				rt.save(teobj);
-				sss.setCode(1);
-				sss.setBobo(true);
-				sss.setMsg("Success");
+				return true;
+				
 			} catch (Exception e) {
+				return false;
 			}
 		}
-		return sss;
+		return false;
 	}
 
 	@Override

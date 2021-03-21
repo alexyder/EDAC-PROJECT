@@ -1,6 +1,6 @@
 package cdac.controller;
 
-import java.util.List;
+import java.util.List;	
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,68 +84,177 @@ public class Controller {
 		return s.askquery(qobj.getPrn(), qobj.getModule(), qobj.getQue());
 	}
 
+//	// Student viewing his query
+//	@GetMapping("/viewqueryst/{prn}") // URL => http://localhost:3000/viewqueryst/10
+//	public List<Queries> view(@PathVariable int prn) {
+//		return s.viewquery(prn);
+//	}
+	
+	
 	// Student viewing his query
-	@GetMapping("/viewqueryst/{prn}") // URL => http://localhost:3000/viewqueryst/10
-	public List<Queries> view(@PathVariable int prn) {
-		return s.viewquery(prn);
-	}
+		@GetMapping("/viewqueryst/{prn}") // URL => http://localhost:3000/viewqueryst/10
+		public ResponseEntity<List<Queries>> view(@PathVariable int prn) {
+			
+			List l =  s.viewquery(prn);
+			if(l.size()<=0)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			else
+				return ResponseEntity.of(Optional.of(l));
+			
+		
+		}
+	
 
+//	// Teacher -> viewing query
+//	@GetMapping("/viewqueryte/{course}/{module}") // URL => http://localhost:3000/viewqueryst/DAC/m2
+//	public List<Queries> viewte(@PathVariable String course, @PathVariable String module) { // module and course ->
+//		return s.viewqueryte(course, module);
+//	}
+	
+	
+	
 	// Teacher -> viewing query
-	@GetMapping("/viewqueryte/{course}/{module}") // URL => http://localhost:3000/viewqueryst/DAC/m2
-	public List<Queries> viewte(@PathVariable String course, @PathVariable String module) { // module and course ->
-		return s.viewqueryte(course, module);
-	}
+		@GetMapping("/viewqueryte/{course}/{module}") // URL => http://localhost:3000/viewqueryst/DAC/m2
+		public ResponseEntity<List<Queries>> viewte(@PathVariable String course, @PathVariable String module) { // module and course ->
+			List l =  s.viewqueryte(course, module);
+			if(l.size()<=0)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			else
+				return ResponseEntity.of(Optional.of(l));
+		}
+	
 
 	// Teacher -> replying query
 	@PostMapping("/replyquery/{qid}")
-	public Status reply(@PathVariable int qid, @RequestBody Queries qobj) {
-		return s.replyquery(qid, qobj.getReply());
+	public ResponseEntity reply(@PathVariable int qid, @RequestBody Queries qobj) {
+		boolean b = s.replyquery(qid, qobj.getReply());
+		if(b)
+			return ResponseEntity.status(HttpStatus.OK).build(); //200 updated
+		else
+			return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build(); // 304 not modified
+		
 	}
 
+//	// Student Registration
+//	@PostMapping("/stureg/{prn}")
+//	public Status str(@PathVariable int prn, @RequestBody Sturegister stuobj) {
+//		return s.stuReg(prn, stuobj);
+//	}
+	
+	
 	// Student Registration
-	@PostMapping("/stureg/{prn}")
-	public Status str(@PathVariable int prn, @RequestBody Sturegister stuobj) {
-		return s.stuReg(prn, stuobj);
-	}
+		@PostMapping("/stureg/{prn}")
+		public ResponseEntity str(@PathVariable int prn, @RequestBody Sturegister stuobj) {
+			boolean b = s.stuReg(prn, stuobj);
+			if(b)
+				return ResponseEntity.status(HttpStatus.OK).build(); //200 updated
+			else
+				return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build(); // 304 not modified
+		}
+	
+	
 
+//	// Student viewing his profile // prn = 0 for guest user
+//	@GetMapping("/viewprofilest/{prn}")
+//	public Sturegister viewprof(@PathVariable int prn) {
+//		return s.viewprofst(prn);
+//	}
+	
+	
 	// Student viewing his profile // prn = 0 for guest user
 	@GetMapping("/viewprofilest/{prn}")
-	public Sturegister viewprof(@PathVariable int prn) {
-		return s.viewprofst(prn);
+	public ResponseEntity<Sturegister> viewprof(@PathVariable int prn) {
+		
+		Sturegister str = s.viewprofst(prn);
+		if(str==null)
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		else
+			return ResponseEntity.of(Optional.of(str));
+		
 	}
+	
+	
 
+//	// Student updating profile
+//	@PutMapping("/stureg/{prn}")
+//	public Status stup(@PathVariable int prn, @RequestBody Sturegister stuobj) {
+//		return s.updatestu(prn, stuobj);
+//	}
+	
+	
 	// Student updating profile
 	@PutMapping("/stureg/{prn}")
-	public Status stup(@PathVariable int prn, @RequestBody Sturegister stuobj) {
-		return s.updatestu(prn, stuobj);
+	public ResponseEntity stup(@PathVariable int prn, @RequestBody Sturegister stuobj) {
+		boolean b = s.updatestu(prn, stuobj);
+		if(b)
+			return ResponseEntity.status(HttpStatus.OK).build(); //200 updated
+		else
+			return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build(); // 304 not modified
 	}
+	
+	
 
+//	// Teacher Registration
+//	@PostMapping("/teareg/{tid}")
+//	public Status ter(@PathVariable int tid, @RequestBody Teacherregister teobj) {
+//		return s.teaReg(tid, teobj);
+//	}
+	
+	
 	// Teacher Registration
-	@PostMapping("/teareg/{tid}")
-	public Status ter(@PathVariable int tid, @RequestBody Teacherregister teobj) {
-		return s.teaReg(tid, teobj);
-	}
+		@PostMapping("/teareg/{tid}")
+		public ResponseEntity ter(@PathVariable int tid, @RequestBody Teacherregister teobj) {
+			boolean b =  s.teaReg(tid, teobj);
+			if(b)
+				return ResponseEntity.status(HttpStatus.ACCEPTED).build(); //202 accepted
+			else 
+				return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build(); // 304 not accepted
+			
+			
+		}
+	
+	
 
+//	// Teacher viewing his profile // tid = 0 for guest user
+//	@GetMapping("/viewprofilete/{tid}")
+//	public Teacherregister viewproft(@PathVariable int tid) {
+//		return s.viewprofte(tid);
+//	}
+	
+	
 	// Teacher viewing his profile // tid = 0 for guest user
-	@GetMapping("/viewprofilete/{tid}")
-	public Teacherregister viewproft(@PathVariable int tid) {
-		return s.viewprofte(tid);
-	}
+		@GetMapping("/viewprofilete/{tid}")
+		public ResponseEntity<Teacherregister> viewproft(@PathVariable int tid) {
+			Teacherregister tr = s.viewprofte(tid);
+			if(tr==null)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			else
+				return ResponseEntity.of(Optional.of(tr));
+		}
+	
 
 	// Teacher updating profile
+//	@PutMapping("/teareg/{tid}")
+//	public Status teup(@PathVariable int tid, @RequestBody Teacherregister teobj) {
+//		
+//		return s.updatetea(tid, teobj);
+//	}
+	
+	
+	// Teacher updating profile
 	@PutMapping("/teareg/{tid}")
-	public Status teup(@PathVariable int tid, @RequestBody Teacherregister teobj) {
-		return s.updatetea(tid, teobj);
-	}
+	public ResponseEntity teup(@PathVariable int tid, @RequestBody Teacherregister teobj) {
+		boolean b = s.updatetea(tid, teobj);
+		if(b)
+				return ResponseEntity.status(HttpStatus.OK).build(); //200  modified
+		else 
+				return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();//304 not modified
 
+	}
 	/////////////////////////////// SPRINT-2 ///////////////////////////////
 
 	
-//	@GetMapping("studentdetails/{course}")
-//	public List<Stlogindac> Studentdetails1(@PathVariable String course) {
-//		
-//		return s.getStd1All(course);
-//	}
+
 	
 	
 	@GetMapping("studentdetails/{course}")
@@ -156,14 +265,9 @@ public class Controller {
 			return ResponseEntity.of(Optional.of(list));
 			
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-//		if(true) {
-//			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
-//		}
-//		else {
-//			return ResponseEntity.of(Optional.of(list));
-//		}
+
 	}
 	
 	
