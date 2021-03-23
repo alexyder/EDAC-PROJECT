@@ -19,7 +19,10 @@ import cdac.modelsp1.Stlogindac;
 import cdac.modelsp1.Sturegister;
 import cdac.modelsp1.Teacherlogin;
 import cdac.modelsp1.Teacherregister;
+import cdac.modelsp2.Cnoti;
+import cdac.modelsp2.TeacherDetails;
 import cdac.servicesp1.Service;
+import cdac.servicesp2.ServiceInf2;
 import cdac.testanshul.TestRepo;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -72,13 +75,13 @@ public class Controller {
 	}
 
 	// Student -> asking query
-	@PostMapping("/askquery")
+	@PostMapping("/dashboard/askquery")
 	public Status ask(@RequestBody Queries qobj) {
 		return s.askquery(qobj.getPrn(), qobj.getModule(), qobj.getQue());
 	}
 
 	// Student viewing his query
-	@GetMapping("/viewqueryst/{prn}") // URL => http://localhost:3000/viewqueryst/10
+	@GetMapping("/dashboard/viewqueryst/{prn}") // URL => http://localhost:3000/viewqueryst/10
 	public List<Queries> view(@PathVariable int prn) {
 		return s.viewquery(prn);
 	}
@@ -133,4 +136,32 @@ public class Controller {
 
 	/////////////////////////////// SPRINT-2 ///////////////////////////////
 
+	@Autowired
+	ServiceInf2 s2;
+
+	// student viewing teacher details
+	@GetMapping("/dashboard/viewteacherdetails")
+	public List<TeacherDetails> viewte() {
+		return s2.teacherdet();
+	}
+
+	// teacher adding course notifications
+	@PostMapping("/dashboard/coursenotifications/{course}")
+	public Status cnadd(@PathVariable String course, @RequestBody Cnoti cobj) {
+		cobj.setCourse(course);
+		return s2.addcnoti(cobj);
+	}
+
+	// student viewing course notification
+	@GetMapping("/dashboard/viewcoursenotifications/{prn}")
+	public List<Cnoti> viewcnoti(@PathVariable int prn) {
+		return s2.viewCnoti(prn);
+	}
+
+	// teacher viewing student details course wise
+	@SuppressWarnings("rawtypes")
+	@GetMapping("/dashboard/viewstudents/{course}")
+	public List viewStudents(@PathVariable String course) {
+		return s2.getStd1All(course);
+	}
 }

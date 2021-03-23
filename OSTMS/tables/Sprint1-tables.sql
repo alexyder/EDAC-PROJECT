@@ -54,16 +54,31 @@ delete from sturegister where prn<100;
 drop table teacherlogin;
 create table teacherlogin ( tid int primary key auto_increment , fullname varchar(50) , pwd varchar(8) );
 insert into teacherlogin values(101 , "Vasu Srinivas" , "vasu2222" );
-insert into teacherlogin (fullname,pwd) values("Shanmugnathan" , "shan2222" );
+insert into teacherlogin (fullname,pwd) values("Shanmugnathan" , "shan2222" ); 
 insert into teacherlogin (fullname,pwd) values("Binu George" , "binu2222" );
+insert into teacherlogin (fullname,pwd) values("Divya MG" , "xyz" );
+insert into teacherlogin (fullname,pwd) values("Karuna Prasad" , "xyz" );
+insert into teacherlogin (fullname,pwd) values("B. Arunachalam" , "xyz" );
+insert into teacherlogin (fullname,pwd) values("Santhosh J." , "xyz" );
+insert into teacherlogin (fullname,pwd) values("Srikant" , "xyz" );
+insert into teacherlogin (fullname,pwd) values("Gopinath" , "xyz" );
+insert into teacherlogin (fullname,pwd) values("Soham Chakarborthy" , "xyz" );
 select * from teacherlogin;
 
 ############################################ TEACHER-REGISTERATION ############################################
 
 drop table teacherregister;
 create table teacherregister (tid int primary key, gender varchar(6) , phone long , email varchar(50) , yoe double , desig varchar(20));
-insert into teacherregister values(11 , "male" , 4444444444 , "abc@gmail.com" , 12 ,"Lab-Assistant");
-insert into teacherregister values(12 , "female" , 8888888888 , "xyz@gmail.com" , 15 ,"Coordinator");
+insert into teacherregister values(101 , "male" , 4444444444 , "abc@gmail.com" , 15 ,"Teacher");
+insert into teacherregister values(102 , "male" , 8888888888 , "xyz@gmail.com" , 15 ,"Teacher");
+insert into teacherregister values(103 , "female" , 8888888888 , "xyz@gmail.com" , 15 ,"Coordinator");
+insert into teacherregister values(104 , "female" , 8888888888 , "xyz@gmail.com" , 15 ,"Teacher");
+insert into teacherregister values(105 , "female" , 8888888888 , "xyz@gmail.com" , 15 ,"Teacher");
+insert into teacherregister values(106 , "male" , 8888888888 , "xyz@gmail.com" , 15 ,"Teacher");
+insert into teacherregister values(107 , "male" , 8888888888 , "xyz@gmail.com" , 15 ,"Teacher");
+insert into teacherregister values(108 , "male" , 8888888888 , "xyz@gmail.com" , 15 ,"Teacher");
+insert into teacherregister values(109 , "male" , 8888888888 , "xyz@gmail.com" , 15 ,"Teacher");
+insert into teacherregister values(110 , "male" , 8888888888 , "xyz@gmail.com" , 15 ,"Lab-Assistant");
 select * from teacherregister;
 
 delete from teacherregister where tid>20;
@@ -95,3 +110,14 @@ insert into queries values(1, 1010520001 , "m2" , "what is my name" , "your name
 insert into queries (prn,module,que,reply) values( 1010520001 , "m2" , "what is my age" , "your age is 1000 years");
 insert into queries (prn,module,que,reply) values( 1030520002 , "m1" , "what is my age" , "your age is 1000 years");
 select * from queries;
+
+############################################ COURSE NOTIFICATIONS ############################################
+
+-- datetime format =>  'YYYY-MM-DD'
+drop table cnoti;
+create table cnoti (id int auto_increment primary key , uptime varchar(20) ,course varchar(20), msg blob not null);
+insert into cnoti values(1,"2021-03-12","DAC","Welcome to Cdac Portal");
+insert into cnoti (uptime,course,msg) values('2021-03-12',"DBDA","Student Details Updated");
+select * from cnoti;
+
+############################################ THE - END ############################################

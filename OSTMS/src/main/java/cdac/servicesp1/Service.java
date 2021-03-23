@@ -136,6 +136,7 @@ public class Service implements ServiceInf {
 			q1.save(qobj);
 			sss.setCode(1);
 			sss.setBobo(true);
+			sss.setMsg("Query Sent");
 		} catch (Exception e) {
 		}
 		return sss;
@@ -143,8 +144,13 @@ public class Service implements ServiceInf {
 
 	@Override // student viewing his queries
 	public List<Queries> viewquery(int prn) {
-		List<Queries> qobjlist = q1.findmyquery(prn);
-		return qobjlist;
+		List<Queries> qobjlist1 = q1.findmyquery(prn);
+		List<Queries> qobjlist2 = new ArrayList<>();
+		for (int i = qobjlist1.size() - 1; i >= 0; i--) {
+			qobjlist2.add(qobjlist1.get(i));
+		}
+
+		return qobjlist2;
 	}
 
 	@Override // teacher viewing queries
