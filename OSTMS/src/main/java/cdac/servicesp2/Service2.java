@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cdac.courier.Status;
 import cdac.modelsp1.Stloginai;
 import cdac.modelsp1.Stlogindac;
 import cdac.modelsp1.Stlogindbda;
@@ -69,16 +68,14 @@ public class Service2 implements ServiceInf2 {
 	}
 
 	@Override // teacher adding course notifications
-	public Status addcnoti(Cnoti cobj) {
+	public boolean addcnoti(Cnoti cobj) {
 		LocalDate ld = LocalDate.now();
 		String ld2 = ld.toString();
 		cobj.setUptime(ld2);
-		Status sss = new Status(0, false, "");
+		boolean sss = false;
 		try {
 			cn.save(cobj);
-			sss.setCode(1);
-			sss.setBobo(true);
-			sss.setMsg("Success");
+			sss = true;
 		} catch (Exception e) {
 		}
 

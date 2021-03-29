@@ -62,16 +62,14 @@ public class Service implements ServiceInf {
 	}
 
 	@Override // teacher -> adding public notifications
-	public Status addgnoti(String msg) {
-		Status sss = new Status(0, false, null);
+	public boolean addgnoti(String msg) {
+		boolean sss = false;
 		LocalDate ld = LocalDate.now();
 		String ld2 = ld.toString();
 		Gnoti gobj = new Gnoti(ld2, msg);
 		try {
 			g1.save(gobj);
-			sss.setCode(1);
-			sss.setBobo(true);
-			sss.setMsg("Success");
+			sss = true;
 		} catch (Exception e) {
 			System.out.println("null message");
 		}
@@ -79,67 +77,57 @@ public class Service implements ServiceInf {
 	}
 
 	@Override // student login check
-	public Status login(int prn, String pwd) {
-		Status sss = new Status(0, false, null);
+	public boolean login(int prn, String pwd) {
+		boolean b = false;
 		int course = prn / 10000000;
 		if (course == 101) { // DAC
 			if (st1.existsById(prn)) {
 				Optional<Stlogindac> obj = st1.findById(prn);
 				if (obj.get().getPwd().equals(pwd)) {
-					sss.setCode(1);
-					sss.setBobo(true);
-					sss.setMsg(obj.get().getFullname());
+					b = true;
 				}
 			}
 		} else if (course == 102) { // DBDA
 			if (st2.existsById(prn)) {
 				Optional<Stlogindbda> obj = st2.findById(prn);
 				if (obj.get().getPwd().equals(pwd)) {
-					sss.setCode(1);
-					sss.setBobo(true);
-					sss.setMsg(obj.get().getFullname());
+					b = true;
 				}
 			}
 		} else if (course == 103) { // AI
 			if (st3.existsById(prn)) {
 				Optional<Stloginai> obj = st3.findById(prn);
 				if (obj.get().getPwd().equals(pwd)) {
-					sss.setCode(1);
-					sss.setBobo(true);
-					sss.setMsg(obj.get().getFullname());
+					b = true;
 				}
 			}
 		}
-		System.out.println(course);
-		return sss;
+//		System.out.println(course);
+		return b;
 	}
 
 	@Override // teacher login check
-	public Status loginte(int tid, String pwd) {
-		Status sss = new Status(0, false, null);
+	public boolean loginte(int tid, String pwd) {
+		boolean b = false;
 		if (t1.existsById(tid)) {
 			Optional<Teacherlogin> obj = t1.findById(tid);
 			if (obj.get().getPwd().equals(pwd)) {
-				sss.setCode(1);
-				sss.setBobo(true);
-				sss.setMsg(obj.get().getFullname());
+				b = true;
 			}
 		}
-		return sss;
+		return b;
 	}
 
 	@Override // student -> ask queries
-	public Status askquery(int prn, String module, String que) {
-		Status sss = new Status(0, false, null);
+	public boolean askquery(int prn, String module, String que) {
+		boolean b = false;
 		Queries qobj = new Queries(prn, module, que, null);
 		try {
 			q1.save(qobj);
-			sss.setCode(1);
-			sss.setBobo(true);
-			sss.setMsg("Query Sent");
+			b = true;
 		} catch (Exception e) {
 		}
-		return sss;
+		return b;
 	}
 
 	@Override // student viewing his queries
@@ -178,17 +166,15 @@ public class Service implements ServiceInf {
 	}
 
 	@Override // teacher replying queries
-	public Status replyquery(int qid, String reply) {
-		Status sss = new Status(0, false, null);
+	public boolean replyquery(int qid, String reply) {
+		boolean b = false;
 		if (q1.existsById(qid)) {
 			int x = q1.replydone(qid, reply);
 			if (x != 0) {
-				sss.setCode(1);
-				sss.setBobo(true);
-				sss.setMsg("Success");
+				b = true;
 			}
 		}
-		return sss;
+		return b;
 	}
 
 	@Override // student registration
