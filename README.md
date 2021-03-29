@@ -1,6 +1,3 @@
-# WEB PORTAL FOR STUDENTS AND TEACHERS ( CDAC BANGALORE )
+# POC
 
-* Institute's Information
-* Assignments and Exams
-* Q & A
-* Syllabus and Schedules etc ..
+* Testing of functions through postman
