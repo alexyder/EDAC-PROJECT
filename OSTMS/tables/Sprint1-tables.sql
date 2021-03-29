@@ -105,7 +105,7 @@ select * from gnoti;
 
 -- multiple columns as primary key =>  primary key (prn,module)
 drop table queries;
-create table queries (qid int primary key auto_increment,prn int, module varchar(20) , que blob not null, reply blob);
+create table queries (qid int primary key auto_increment,prn int, module varchar(255) , que blob not null, reply blob);
 insert into queries values(1, 1010520001 , "m2" , "what is my name" , "your name is anshul");
 insert into queries (prn,module,que,reply) values( 1010520001 , "m2" , "what is my age" , "your age is 1000 years");
 insert into queries (prn,module,que,reply) values( 1030520002 , "m1" , "what is my age" , "your age is 1000 years");
@@ -120,4 +120,16 @@ insert into cnoti values(1,"2021-03-12","DAC","Welcome to Cdac Portal");
 insert into cnoti (uptime,course,msg) values('2021-03-12',"DBDA","Student Details Updated");
 select * from cnoti;
 
-############################################ THE - END ############################################
+############################################ UPLOAD/DOWNLOAD - COURSE MATERIAL ############################################
+
+drop table myfiles;
+create table myfiles (id int auto_increment primary key , filename varchar(255) , filetype varchar(255), data longblob , course varchar(10));
+select * from myfiles;
+delete from myfiles;
+SHOW VARIABLES LIKE 'max_allowed_packet';
+-- # max_allowed_packet=1073741824 max_allowed_packet=1G ==> setting this in my.ini file
+
+############################################ UPLOAD/DOWNLOAD - ASSIGNMENTS ############################################
+
+create table myfiles (id varchar(255) not null primary key , data longblob , file_name varchar(255) , 
+file_type varchar(255) , msg varchar(255) , course varchar(255) , subject varchar(255));

@@ -2,7 +2,12 @@ package cdac.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import cdac.courier.Status;
 import cdac.modelsp1.Gnoti;
@@ -21,8 +28,10 @@ import cdac.modelsp1.Teacherlogin;
 import cdac.modelsp1.Teacherregister;
 import cdac.modelsp2.Cnoti;
 import cdac.modelsp2.TeacherDetails;
+import cdac.modelsp3.Myfiles;
 import cdac.servicesp1.Service;
 import cdac.servicesp2.ServiceInf2;
+import cdac.servicesp3.FileService;
 import cdac.testanshul.TestRepo;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -163,5 +172,48 @@ public class Controller {
 	@GetMapping("/dashboard/viewstudents/{course}")
 	public List viewStudents(@PathVariable String course) {
 		return s2.getStd1All(course);
+	}
+
+	/////////////////////////////// SPRINT-3 ///////////////////////////////
+
+	// FILE - UPLOAD
+
+	@Autowired
+	FileService s3;
+
+	@PostMapping("/upload/{course}")
+	public String upload(@RequestParam("file") MultipartFile file, @PathVariable String course) {
+		return s3.uploadFile(file, course);
+	}
+
+	// FILE - DISPLAYING
+
+	@GetMapping("/getallfilesforteacher")
+	public List<Myfiles> getteacher() {
+		return s3.displayingAllFilesforTeacher();
+	}
+
+	@GetMapping("/getallfilesforstudent/{course}")
+	public List<Myfiles> getstudent(@PathVariable String course) {
+		System.out.println(course);
+		List<Myfiles> a = s3.displayingAllFilesforStudent(course);
+		System.out.println(a);
+		return s3.displayingAllFilesforStudent(course);
+	}
+
+	// FILE - DOWNLOAD
+
+	@GetMapping("/downloadfile/{fileid}")
+	ResponseEntity<byte[]> download(@PathVariable int fileid, HttpServletRequest request) {
+
+		Myfiles mobj = s3.downloadFile(fileid);
+
+		if (mobj != null) {
+			String mimeType = request.getServletContext().getMimeType(mobj.getFilename());
+			return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType))
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;fileName=" + mobj.getFilename())
+					.body(mobj.getData());
+		}
+		return null;
 	}
 }
