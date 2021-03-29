@@ -100,6 +100,7 @@ create table gnoti (id int auto_increment primary key , uptime varchar(20) , msg
 insert into gnoti values(1,"2021-03-12","Welcome to Cdac Portal");
 insert into gnoti (uptime,msg) values('2021-03-12',"Student Details Updated");
 select * from gnoti;
+delete from gnoti;
 
 ############################################ QUERIES ############################################
 

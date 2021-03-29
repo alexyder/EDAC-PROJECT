@@ -6,15 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,16 +22,13 @@ import cdac.courier.Status;
 import cdac.modelsp1.Gnoti;
 import cdac.modelsp1.Queries;
 import cdac.modelsp1.Stlogindac;
-import cdac.modelsp1.Sturegister;
 import cdac.modelsp1.Teacherlogin;
-import cdac.modelsp1.Teacherregister;
 import cdac.modelsp2.Cnoti;
 import cdac.modelsp2.TeacherDetails;
 import cdac.modelsp3.Myfiles;
 import cdac.servicesp1.Service;
 import cdac.servicesp2.ServiceInf2;
 import cdac.servicesp3.FileService;
-import cdac.testanshul.TestRepo;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -40,13 +36,13 @@ public class Controller {
 
 	// ----- testing ----- //
 
-	@Autowired
-	TestRepo trtr;
-
-	@RequestMapping("/mytest") // URL => http://localhost:3000/mytest
-	public String xyz() {
-		return "Connected to Backend";
-	}
+//	@Autowired
+//	TestRepo trtr;
+//
+//	@RequestMapping("/mytest") // URL => http://localhost:3000/mytest
+//	public String xyz() {
+//		return "Connected to Backend";
+//	}
 
 	// ----- testing ----- //
 
@@ -57,14 +53,24 @@ public class Controller {
 
 	// General Notifications - showing in home page
 	@GetMapping("/gnoti")
-	public List<Gnoti> gnf() {
-		return s.gnotifetch();
+	public ResponseEntity<List<Gnoti>> gnf() {
+		List<Gnoti> gobj = s.gnotifetch();
+		if (gobj.size() > 0)
+			return ResponseEntity.ok(gobj);
+		else
+			return ResponseEntity.notFound().build();
+
 	}
 
 	// General Notifications - teacher is adding new notification
 	@PostMapping("/gnoti")
-	public Status gnf2(@RequestBody Status sobj) {
-		return s.addgnoti(sobj.getMsg());
+	public ResponseEntity<Object> gnf2(@RequestBody Status sobj) {
+
+		boolean a = s.addgnoti(sobj.getMsg());
+		if (a)
+			return ResponseEntity.ok().build();
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 	// Student login
@@ -72,76 +78,102 @@ public class Controller {
 	// class's data
 	// advantage => only one login function
 	@PostMapping("/loginst")
-	public Status loginchkst(@RequestBody Stlogindac stdacobj) {
-		System.out.println(stdacobj);
-		return s.login(stdacobj.getPrn(), stdacobj.getPwd());
+	public ResponseEntity<Object> loginchkst(@RequestBody Stlogindac stdacobj) {
+		boolean a = s.login(stdacobj.getPrn(), stdacobj.getPwd());
+		if (a)
+			return ResponseEntity.ok().build();
+		else
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
 	// Teacher login
 	@PostMapping("/loginte")
-	public Status loginchkte(@RequestBody Teacherlogin tobj) {
-		return s.loginte(tobj.getTid(), tobj.getPwd());
+	public ResponseEntity<Object> loginchkte(@RequestBody Teacherlogin tobj) {
+		boolean a = s.loginte(tobj.getTid(), tobj.getPwd());
+		if (a)
+			return ResponseEntity.ok().build();
+		else
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
 	// Student -> asking query
 	@PostMapping("/dashboard/askquery")
-	public Status ask(@RequestBody Queries qobj) {
-		return s.askquery(qobj.getPrn(), qobj.getModule(), qobj.getQue());
+	public ResponseEntity<String> ask(@RequestBody Queries qobj) {
+		boolean a = s.askquery(qobj.getPrn(), qobj.getModule(), qobj.getQue());
+		if (a)
+			return ResponseEntity.ok("Query Sent");
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 	// Student viewing his query
 	@GetMapping("/dashboard/viewqueryst/{prn}") // URL => http://localhost:3000/viewqueryst/10
-	public List<Queries> view(@PathVariable int prn) {
-		return s.viewquery(prn);
+	public ResponseEntity<List<Queries>> view(@PathVariable int prn) {
+		List<Queries> a = s.viewquery(prn);
+		if (a.size() > 0)
+			return ResponseEntity.ok(a);
+		else
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	// Teacher -> viewing query
 	@GetMapping("/viewqueryte/{course}/{module}") // URL => http://localhost:3000/viewqueryst/DAC/m2
-	public List<Queries> viewte(@PathVariable String course, @PathVariable String module) { // module and course ->
-		return s.viewqueryte(course, module);
+	public ResponseEntity<List<Queries>> viewte(@PathVariable String course, @PathVariable String module) {
+		List<Queries> aa = s.viewqueryte(course, module);
+		if (aa.size() > 0)
+			return ResponseEntity.ok(aa);
+		else
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	// Teacher -> replying query
 	@PostMapping("/replyquery/{qid}")
-	public Status reply(@PathVariable int qid, @RequestBody Queries qobj) {
-		return s.replyquery(qid, qobj.getReply());
+	public ResponseEntity<Object> reply(@PathVariable int qid, @RequestBody Queries qobj) {
+		boolean a = s.replyquery(qid, qobj.getReply());
+		if (a)
+			return ResponseEntity.ok().build();
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
-	// Student Registration
-	@PostMapping("/stureg/{prn}")
-	public Status str(@PathVariable int prn, @RequestBody Sturegister stuobj) {
-		return s.stuReg(prn, stuobj);
-	}
-
-	// Student viewing his profile // prn = 0 for guest user
-	@GetMapping("/viewprofilest/{prn}")
-	public Sturegister viewprof(@PathVariable int prn) {
-		return s.viewprofst(prn);
-	}
-
-	// Student updating profile
-	@PutMapping("/stureg/{prn}")
-	public Status stup(@PathVariable int prn, @RequestBody Sturegister stuobj) {
-		return s.updatestu(prn, stuobj);
-	}
-
-	// Teacher Registration
-	@PostMapping("/teareg/{tid}")
-	public Status ter(@PathVariable int tid, @RequestBody Teacherregister teobj) {
-		return s.teaReg(tid, teobj);
-	}
-
-	// Teacher viewing his profile // tid = 0 for guest user
-	@GetMapping("/viewprofilete/{tid}")
-	public Teacherregister viewproft(@PathVariable int tid) {
-		return s.viewprofte(tid);
-	}
-
-	// Teacher updating profile
-	@PutMapping("/teareg/{tid}")
-	public Status teup(@PathVariable int tid, @RequestBody Teacherregister teobj) {
-		return s.updatetea(tid, teobj);
-	}
+	// Registration and profile part is excluded
+	// --------------------------------------------------------------------------------------------
+//
+//	// Student Registration
+//	@PostMapping("/stureg/{prn}")
+//	public Status str(@PathVariable int prn, @RequestBody Sturegister stuobj) {
+//		return s.stuReg(prn, stuobj);
+//	}
+//
+//	// Student viewing his profile // prn = 0 for guest user
+//	@GetMapping("/viewprofilest/{prn}")
+//	public Sturegister viewprof(@PathVariable int prn) {
+//		return s.viewprofst(prn);
+//	}
+//
+//	// Student updating profile
+//	@PutMapping("/stureg/{prn}")
+//	public Status stup(@PathVariable int prn, @RequestBody Sturegister stuobj) {
+//		return s.updatestu(prn, stuobj);
+//	}
+//
+//	// Teacher Registration
+//	@PostMapping("/teareg/{tid}")
+//	public Status ter(@PathVariable int tid, @RequestBody Teacherregister teobj) {
+//		return s.teaReg(tid, teobj);
+//	}
+//
+//	// Teacher viewing his profile // tid = 0 for guest user
+//	@GetMapping("/viewprofilete/{tid}")
+//	public Teacherregister viewproft(@PathVariable int tid) {
+//		return s.viewprofte(tid);
+//	}
+//
+//	// Teacher updating profile
+//	@PutMapping("/teareg/{tid}")
+//	public Status teup(@PathVariable int tid, @RequestBody Teacherregister teobj) {
+//		return s.updatetea(tid, teobj);
+//	}
 
 	/////////////////////////////// SPRINT-2 ///////////////////////////////
 
@@ -150,28 +182,44 @@ public class Controller {
 
 	// student viewing teacher details
 	@GetMapping("/dashboard/viewteacherdetails")
-	public List<TeacherDetails> viewte() {
-		return s2.teacherdet();
+	public ResponseEntity<List<TeacherDetails>> viewte() {
+		List<TeacherDetails> tdobj = s2.teacherdet();
+		if (tdobj.size() > 0)
+			return ResponseEntity.ok(tdobj);
+		else
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	// teacher adding course notifications
 	@PostMapping("/dashboard/coursenotifications/{course}")
-	public Status cnadd(@PathVariable String course, @RequestBody Cnoti cobj) {
+	public ResponseEntity<Object> cnadd(@PathVariable String course, @RequestBody Cnoti cobj) {
 		cobj.setCourse(course);
-		return s2.addcnoti(cobj);
+		boolean a = s2.addcnoti(cobj);
+		if (a)
+			return ResponseEntity.ok().build();
+		else
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 	// student viewing course notification
 	@GetMapping("/dashboard/viewcoursenotifications/{prn}")
-	public List<Cnoti> viewcnoti(@PathVariable int prn) {
-		return s2.viewCnoti(prn);
+	public ResponseEntity<List<Cnoti>> viewcnoti(@PathVariable int prn) {
+		List<Cnoti> cobj = s2.viewCnoti(prn);
+		if (cobj.size() > 0)
+			return ResponseEntity.ok(cobj);
+		else
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	// teacher viewing student details course wise
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/dashboard/viewstudents/{course}")
-	public List viewStudents(@PathVariable String course) {
-		return s2.getStd1All(course);
+	public ResponseEntity<List> viewStudents(@PathVariable String course) {
+		List<Stlogindac> a = s2.getStd1All(course);
+		if (a.size() > 0)
+			return ResponseEntity.ok(a);
+		else
+			return ResponseEntity.notFound().build();
 	}
 
 	/////////////////////////////// SPRINT-3 ///////////////////////////////
