@@ -1,4 +1,4 @@
-package cdac.testanshul;
+package cdac.testpoc;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

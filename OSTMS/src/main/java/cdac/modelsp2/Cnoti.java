@@ -7,10 +7,10 @@ import javax.persistence.Id;
 public class Cnoti {
 
 	@Id
-	int id;
-	String uptime;
-	String course;
-	String msg;
+	private int id;
+	private String uptime;
+	private String course;
+	private String msg;
 
 	public Cnoti() {
 		super();

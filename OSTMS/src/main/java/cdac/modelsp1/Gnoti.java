@@ -7,9 +7,9 @@ import javax.persistence.Id;
 public class Gnoti { // GENERAL NOTIFICATIONS => HOME PAGE , AVAILABLE FOR ALL THE USERS
 
 	@Id
-	int id; // auto-increment
-	String uptime;
-	String msg;
+	private int id; // auto-increment
+	private String uptime;
+	private String msg;
 
 	public Gnoti() {
 		super();

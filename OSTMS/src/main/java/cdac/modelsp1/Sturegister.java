@@ -7,17 +7,17 @@ import javax.persistence.Id;
 public class Sturegister {
 
 	@Id
-	int prn;
-	String gender;
-	String dob;
-	long phone;
-	String email;
-	String address;
-	String city;
-	String state;
-	String country;
-	String course;
-	String batch;
+	private int prn;
+	private String gender;
+	private String dob;
+	private long phone;
+	private String email;
+	private String address;
+	private String city;
+	private String state;
+	private String country;
+	private String course;
+	private String batch;
 
 	public Sturegister() {
 		super();

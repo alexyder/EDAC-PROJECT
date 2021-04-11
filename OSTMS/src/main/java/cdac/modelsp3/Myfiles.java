@@ -11,14 +11,11 @@ public class Myfiles {
 
 	@Id
 	private int id;
-
 	private String filename;
-
 	private String filetype;
 
 	@Lob
 	private byte[] data;
-
 	private String course;
 
 	public Myfiles() {

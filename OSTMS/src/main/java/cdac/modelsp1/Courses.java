@@ -7,8 +7,8 @@ import javax.persistence.Id;
 public class Courses {
 
 	@Id
-	int cid;
-	String cname;
+	private int cid;
+	private String cname;
 
 	public Courses() {
 		super();

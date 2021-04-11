@@ -7,9 +7,9 @@ import javax.persistence.Id;
 public class Teacherlogin {
 
 	@Id
-	int tid;
-	String fullname;
-	String pwd;
+	private int tid;
+	private String fullname;
+	private String pwd;
 
 	public Teacherlogin(int tid, String fullname, String pwd) {
 		super();

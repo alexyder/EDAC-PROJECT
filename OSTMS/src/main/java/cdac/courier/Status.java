@@ -2,9 +2,9 @@ package cdac.courier;
 
 public class Status {
 
-	int code;
-	boolean bobo;
-	String msg;
+	private int code;
+	private boolean bobo;
+	private String msg;
 
 	public Status(int code, boolean bobo, String msg) {
 		super();

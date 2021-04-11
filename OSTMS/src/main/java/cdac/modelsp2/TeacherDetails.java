@@ -2,12 +2,12 @@ package cdac.modelsp2;
 
 public class TeacherDetails {
 
-	int tid;
-	String fullname;
-	String gender;
-	String email;
-	int yoe;
-	String desig;
+	private int tid;
+	private String fullname;
+	private String gender;
+	private String email;
+	private int yoe;
+	private String desig;
 
 	public TeacherDetails() {
 		super();

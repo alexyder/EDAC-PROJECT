@@ -7,12 +7,12 @@ import javax.persistence.Id;
 public class Teacherregister {
 
 	@Id
-	int tid;
-	String gender;
-	long phone;
-	String email;
-	int yoe;
-	String desig;
+	private int tid;
+	private String gender;
+	private long phone;
+	private String email;
+	private int yoe;
+	private String desig;
 
 	public Teacherregister() {
 		super();

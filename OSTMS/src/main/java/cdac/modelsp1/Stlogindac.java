@@ -7,9 +7,9 @@ import javax.persistence.Id;
 public class Stlogindac {
 
 	@Id
-	int prn;
-	String fullname;
-	String pwd;
+	private int prn;
+	private String fullname;
+	private String pwd;
 
 	public int getPrn() {
 		return prn;

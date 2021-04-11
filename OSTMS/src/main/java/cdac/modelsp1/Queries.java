@@ -7,11 +7,11 @@ import javax.persistence.Id;
 public class Queries {
 
 	@Id
-	int qid; // auto-increment
-	int prn;
-	String module;
-	String que;
-	String reply;
+	private int qid; // auto-increment
+	private int prn;
+	private String module;
+	private String que;
+	private String reply;
 
 	public Queries() {
 		super();
