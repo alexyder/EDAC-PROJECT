@@ -111,6 +111,7 @@ insert into queries values(1, 1010520001 , "m2" , "what is my name" , "your name
 insert into queries (prn,module,que,reply) values( 1010520001 , "m2" , "what is my age" , "your age is 1000 years");
 insert into queries (prn,module,que,reply) values( 1030520002 , "m1" , "what is my age" , "your age is 1000 years");
 select * from queries;
+delete from queries;
 
 ############################################ COURSE NOTIFICATIONS ############################################
 

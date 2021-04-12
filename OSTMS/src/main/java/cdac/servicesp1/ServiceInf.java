@@ -14,9 +14,9 @@ public interface ServiceInf {
 
 	boolean addgnoti(String msg); // gnotification adding
 
-	boolean login(int prn, String pwd); // student login
+	Status login(int prn, String pwd); // student login
 
-	boolean loginte(int tid, String pwd); // teacher login
+	Status loginte(int tid, String pwd); // teacher login
 
 	boolean askquery(int prn, String module, String text); // student asking query
 

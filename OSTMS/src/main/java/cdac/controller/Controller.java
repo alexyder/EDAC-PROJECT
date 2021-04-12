@@ -78,20 +78,20 @@ public class Controller {
 	// class's data
 	// advantage => only one login function
 	@PostMapping("/loginst")
-	public ResponseEntity<Object> loginchkst(@RequestBody Stlogindac stdacobj) {
-		boolean a = s.login(stdacobj.getPrn(), stdacobj.getPwd());
-		if (a)
-			return ResponseEntity.ok().build();
+	public ResponseEntity<String> loginchkst(@RequestBody Stlogindac stdacobj) {
+		Status a = s.login(stdacobj.getPrn(), stdacobj.getPwd());
+		if (a.isBobo())
+			return ResponseEntity.ok(a.getMsg());
 		else
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
 	// Teacher login
 	@PostMapping("/loginte")
-	public ResponseEntity<Object> loginchkte(@RequestBody Teacherlogin tobj) {
-		boolean a = s.loginte(tobj.getTid(), tobj.getPwd());
-		if (a)
-			return ResponseEntity.ok().build();
+	public ResponseEntity<String> loginchkte(@RequestBody Teacherlogin tobj) {
+		Status a = s.loginte(tobj.getTid(), tobj.getPwd());
+		if (a.isBobo())
+			return ResponseEntity.ok(a.getMsg());
 		else
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}

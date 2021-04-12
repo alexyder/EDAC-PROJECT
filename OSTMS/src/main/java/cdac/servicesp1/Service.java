@@ -77,28 +77,34 @@ public class Service implements ServiceInf {
 	}
 
 	@Override // student login check
-	public boolean login(int prn, String pwd) {
-		boolean b = false;
+	public Status login(int prn, String pwd) {
+		Status b = new Status(0, false, "");
 		int course = prn / 10000000;
 		if (course == 101) { // DAC
 			if (st1.existsById(prn)) {
 				Optional<Stlogindac> obj = st1.findById(prn);
 				if (obj.get().getPwd().equals(pwd)) {
-					b = true;
+					b.setCode(1);
+					b.setBobo(true);
+					b.setMsg(obj.get().getFullname());
 				}
 			}
 		} else if (course == 102) { // DBDA
 			if (st2.existsById(prn)) {
 				Optional<Stlogindbda> obj = st2.findById(prn);
 				if (obj.get().getPwd().equals(pwd)) {
-					b = true;
+					b.setCode(1);
+					b.setBobo(true);
+					b.setMsg(obj.get().getFullname());
 				}
 			}
 		} else if (course == 103) { // AI
 			if (st3.existsById(prn)) {
 				Optional<Stloginai> obj = st3.findById(prn);
 				if (obj.get().getPwd().equals(pwd)) {
-					b = true;
+					b.setCode(1);
+					b.setBobo(true);
+					b.setMsg(obj.get().getFullname());
 				}
 			}
 		}
@@ -107,12 +113,13 @@ public class Service implements ServiceInf {
 	}
 
 	@Override // teacher login check
-	public boolean loginte(int tid, String pwd) {
-		boolean b = false;
+	public Status loginte(int tid, String pwd) {
+		Status b = new Status(0, false, "");
 		if (t1.existsById(tid)) {
 			Optional<Teacherlogin> obj = t1.findById(tid);
 			if (obj.get().getPwd().equals(pwd)) {
-				b = true;
+				b.setBobo(true);
+				b.setMsg(obj.get().getFullname());
 			}
 		}
 		return b;
@@ -123,8 +130,10 @@ public class Service implements ServiceInf {
 		boolean b = false;
 		Queries qobj = new Queries(prn, module, que, null);
 		try {
-			q1.save(qobj);
-			b = true;
+			if (que.length() != 0) {
+				q1.save(qobj);
+				b = true;
+			}
 		} catch (Exception e) {
 		}
 		return b;
